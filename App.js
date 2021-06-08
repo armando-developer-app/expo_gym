@@ -1,18 +1,17 @@
 import React from 'react';
-import firebaseConfig from './config/firebaseConfig'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import * as firebase from 'firebase'
-import 'firebase/firestore'
 
 import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import SignupScreen from './screens/SignupScreen'
+import FirestoreModule from './components/FireStore';
 
-// Init Firebase
-if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-}
+console.log("---------- [INIT] Starting app [INIT] ----------")
+
+// Init Firestore
+const fireStore = FirestoreModule.getInstance()
+fireStore.initFirebase()
 
 // Init stack-navigator
 const Stack = createStackNavigator();
