@@ -2,6 +2,8 @@ import React from 'react';
 import firebaseConfig from './config/firebaseConfig'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import * as firebase from 'firebase'
+import 'firebase/firestore'
 
 import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen'
@@ -14,6 +16,7 @@ if (firebase.apps.length === 0) {
 
 // Init stack-navigator
 const Stack = createStackNavigator();
+
 export default function App() {
   return (
     <NavigationContainer>
