@@ -1,35 +1,103 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
+import * as firebase from 'firebase'
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [errorEmailMsg, setErrorEmailMsg] = useState(null)
+    const [errorPasswordMsg, setErrorPasswordMsg] = useState(null)
+
+    const createAlertButton = () => {
+        Alert.alert(
+            "Ops!",
+            "User not found.",
+            [
+                {
+                text: "OK",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+                }
+            ],
+            { cancelable: false }
+        );
+    }
+
+    function loginToFirebase() {
+        console.log('[INFO] loginToFirebase')
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            var user = userCredential.user;
+            console.log(user)
+
+            navigation.navigate('Home')
+        })
+        .catch((error) => {
+            console.log('[ERROR] ' + error.code)
+
+            if (error.code == 'auth/invalid-email') {
+                setErrorEmailMsg('Invalid Email.')
+                setErrorPasswordMsg(null)
+                return
+            } else if (error.code == 'auth/wrong-password') {
+                setErrorPasswordMsg('Wrong Password.')
+                setErrorEmailMsg(null)
+                return
+            } else {
+                createAlertButton()
+                return
+            }
+        });
+    }
+
+    function goToSignupScreen() {
+        console.log('[INFO] goToSignupScreen')
+    }
 
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Login Screen</Text>
+
             <TextInput style={styles.textInput}
                 onChangeText={email => setEmail(email)}
                 email={email}
-                placeholder='  email@gmail.com'
+                placeholder='email@gmail.com'
                 placeholderTextColor='gray'
+                keyboardType='email-address'
+                autoCapitalize='none'
             />
+
+            <View>
+                {errorEmailMsg && <Text style={styles.errorText}>{errorEmailMsg}</Text>}
+            </View>
+
             <TextInput style={styles.textInput}
-                onChangeText={email => setEmail(email)}
-                email={email}
-                placeholder='  password'
+                onChangeText={password => setPassword(password)}
+                onEnd
+                password={password}
+                placeholder='password'
                 placeholderTextColor='gray'
+                secureTextEntry={true}
+                autoCapitalize='none'
             />
-            <TouchableOpacity>
-                <View style={[styles.button, {justifyContent:'center', alignItems:'center'}]}>
+
+            <View>
+                {errorPasswordMsg && <Text style={styles.errorText}>{errorPasswordMsg}</Text>}
+            </View>
+
+            <TouchableOpacity onPress={() => loginToFirebase()}>
+                <View style={[styles.button, {justifyContent:'center', alignItems:'center', backgroundColor: 'orange'}]}>
                     <Text style={styles.buttonText}> Login </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity>
-                <View style={[styles.button, {justifyContent:'center', alignItems:'center'}]}>
-                    <Text style={styles.buttonText}> Sign Up! </Text>
+
+            <TouchableOpacity onPress={() => goToSignupScreen()}>
+                <View style={[styles.button, {justifyContent:'center', alignItems:'center', backgroundColor: 'orange'}]}>
+                    <Text style={styles.buttonText}> Sign Up </Text>
                 </View>
             </TouchableOpacity>
+
         </View>
     )
 }
@@ -46,6 +114,14 @@ const styles = StyleSheet.create({
         fontSize: 40,
         marginBottom: 20
     },
+    errorText: {
+        height: 20,
+        width: 300,
+        color: 'red',
+        fontSize: 15,
+        marginBottom: 10,
+        marginTop: 5
+    },
     buttonText: {
         color: 'white',
         fontSize: 25
@@ -56,13 +132,14 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         color: 'white',
-        margin: 10,
-        fontSize: 20
+        fontSize: 20,
+        padding: 10,
+        margin: 5
     },
     button: {
         width: 300,
         height: 50,
-        backgroundColor: 'blue',
+       // backgroundColor: 'blue',
         marginTop: 20
     }
 })
