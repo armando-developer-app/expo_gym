@@ -8,6 +8,21 @@ const LoginScreen = ({ navigation }) => {
     const [errorEmailMsg, setErrorEmailMsg] = useState(null)
     const [errorPasswordMsg, setErrorPasswordMsg] = useState(null)
 
+    const clearState = () => {
+        setEmail('')
+        setPassword('')
+        setErrorEmailMsg(null)
+        setErrorPasswordMsg(null)
+      };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+        console.log('effect')
+        clearState()
+        })
+        return unsubscribe
+    }, []);
+
     const createAlertButton = () => {
         Alert.alert(
             "Ops!",
@@ -61,7 +76,7 @@ const LoginScreen = ({ navigation }) => {
 
             <TextInput style={styles.textInput}
                 onChangeText={email => setEmail(email)}
-                email={email}
+                value={email}
                 placeholder='email@gmail.com'
                 placeholderTextColor='gray'
                 keyboardType='email-address'
@@ -74,8 +89,7 @@ const LoginScreen = ({ navigation }) => {
 
             <TextInput style={styles.textInput}
                 onChangeText={password => setPassword(password)}
-                onEnd
-                password={password}
+                value={password}
                 placeholder='password'
                 placeholderTextColor='gray'
                 secureTextEntry={true}
