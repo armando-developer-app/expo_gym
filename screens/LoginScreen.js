@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 import * as firebase from 'firebase'
+import { back } from 'react-native/Libraries/Animated/src/Easing'
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('')
@@ -71,47 +73,49 @@ const LoginScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Login Screen</Text>
+        <View style={{backgroundColor: 'black', flex: 1, alignItems: 'center'/*, borderWidth: 2, borderColor: 'green'*/}}>
+            <Ionicons name="barbell" style={styles.icon} />
 
-            <TextInput style={styles.textInput}
-                onChangeText={email => setEmail(email)}
-                value={email}
-                placeholder='email@gmail.com'
-                placeholderTextColor='gray'
-                keyboardType='email-address'
-                autoCapitalize='none'
-            />
+            <View style={styles.container}>
+                <TextInput style={styles.textInput}
+                    onChangeText={email => setEmail(email)}
+                    value={email}
+                    placeholder='email@gmail.com'
+                    placeholderTextColor='gray'
+                    keyboardType='email-address'
+                    autoCapitalize='none'
+                />
 
-            <View>
-                {errorEmailMsg && <Text style={styles.errorText}>{errorEmailMsg}</Text>}
-            </View>
-
-            <TextInput style={styles.textInput}
-                onChangeText={password => setPassword(password)}
-                value={password}
-                placeholder='password'
-                placeholderTextColor='gray'
-                secureTextEntry={true}
-                autoCapitalize='none'
-            />
-
-            <View>
-                {errorPasswordMsg && <Text style={styles.errorText}>{errorPasswordMsg}</Text>}
-            </View>
-
-            <TouchableOpacity onPress={() => loginToFirebase()}>
-                <View style={[styles.button, {justifyContent:'center', alignItems:'center', backgroundColor: 'orange'}]}>
-                    <Text style={styles.buttonText}> Login </Text>
+                <View>
+                    {errorEmailMsg && <Text style={styles.errorText}>{errorEmailMsg}</Text>}
                 </View>
-            </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => goToSignupScreen()}>
-                <View style={[styles.button, {justifyContent:'center', alignItems:'center', backgroundColor: 'orange'}]}>
-                    <Text style={styles.buttonText}> Sign Up </Text>
+                <TextInput style={styles.textInput}
+                    onChangeText={password => setPassword(password)}
+                    value={password}
+                    placeholder='password'
+                    placeholderTextColor='gray'
+                    secureTextEntry={true}
+                    autoCapitalize='none'
+                />
+
+                <View>
+                    {errorPasswordMsg && <Text style={styles.errorText}>{errorPasswordMsg}</Text>}
                 </View>
-            </TouchableOpacity>
 
+                <TouchableOpacity onPress={() => loginToFirebase()}>
+                    <View style={[styles.button, {justifyContent:'center', alignItems:'center', backgroundColor: 'orange'}]}>
+                        <Text style={styles.buttonText}> Login </Text>
+                    </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => goToSignupScreen()}>
+                    <View style={[styles.button, {justifyContent:'center', alignItems:'center', backgroundColor: 'orange'}]}>
+                        <Text style={styles.buttonText}> Sign Up </Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <Text style={{color: 'white', fontSize: 10, marginTop: 275}}>Terms of condition: This is the best app you will ever witness in your life.</Text>
         </View>
     )
 }
@@ -119,9 +123,20 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'black',
-        flex: 1,
+        flex: 0.5,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+    //    borderWidth: 2,
+      //  borderColor: 'red'
+    },
+    icon: {
+        color: 'white',
+        fontSize: 220,
+        marginTop: 175,
+        marginBottom: 150,
+        transform: [{
+            rotateZ: '-20deg'
+        }]
     },
     text: {
         color: 'white',
@@ -148,13 +163,14 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
         padding: 10,
-        margin: 5
+        margin: 5,
+        borderRadius: 15
     },
     button: {
         width: 300,
         height: 50,
-       // backgroundColor: 'blue',
-        marginTop: 20
+        marginTop: 20,
+        borderRadius: 15
     }
 })
 
