@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import * as firebase from 'firebase'
-import { back } from 'react-native/Libraries/Animated/src/Easing'
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('')
@@ -70,6 +69,7 @@ const LoginScreen = ({ navigation }) => {
 
     function goToSignupScreen() {
         console.log('[INFO] goToSignupScreen')
+        navigation.navigate('Signup')
     }
 
     return (
